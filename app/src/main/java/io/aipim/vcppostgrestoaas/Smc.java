@@ -1,5 +1,6 @@
 package io.aipim.vcppostgrestoaas;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -8,7 +9,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementList;
 
-public class Smc {
+public class Smc implements Serializable {
 
 	private HashMap<String, Object> props;
 	private ArrayList<Smc> children = new ArrayList<>();
