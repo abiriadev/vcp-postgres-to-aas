@@ -8,14 +8,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Fetcher {
 
 	// JDBC URL, username, and password of PostgreSQL server
+	@NonNull
 	String url;
+
+	@NonNull
 	String user;
+
+	@NonNull
 	String password;
 
 	private HashMap<String, Smc> pool;
@@ -125,5 +131,7 @@ public class Fetcher {
 			}
 		}
 		// var env = Env.build(pool.values().toArray()[0]);
+
+		return new Env();
 	}
 }
