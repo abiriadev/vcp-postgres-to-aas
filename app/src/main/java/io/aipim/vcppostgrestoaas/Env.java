@@ -7,7 +7,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 
 public class Env {
 
-	public Environment toAas(SubmodelElement subel) {
+	public static Environment build(SubmodelElement subel) {
 		return new DefaultEnvironment.Builder()
 			.submodels(
 				new DefaultSubmodel.Builder()
