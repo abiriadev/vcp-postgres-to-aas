@@ -21,6 +21,12 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
+
+    // postgresql JDBC driver
+    implementation 'org.postgresql:postgresql:42.6.0'
+
+    // AAS4J
+    implementation 'org.eclipse.digitaltwin.aas4j:dataformat-json:1.0.0-milestone-03.1'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
