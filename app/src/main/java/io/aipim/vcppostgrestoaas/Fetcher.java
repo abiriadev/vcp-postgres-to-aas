@@ -61,9 +61,20 @@ public class Fetcher {
 				); // @json?
 				var leaf = rs.getBoolean("leaf"); // @boolean
 
-				var smc = new Smc();
-				smc.put("treeName", name);
-				smc.put("path", path);
+				var smc = new Smc(name);
+
+				new JsonParser(attributeSchema)
+					.parse(attribute)
+					.entrySet()
+					.stream()
+					.forEach(ent ->
+						smc.put(
+							ent.getKey(),
+							ent.getValue()
+						)
+					);
+
+				smc.put("leaf", leaf);
 
 				pool.put(path, smc);
 

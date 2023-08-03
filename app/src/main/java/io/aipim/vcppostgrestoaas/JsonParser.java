@@ -1,29 +1,36 @@
 package io.aipim.vcppostgrestoaas;
 
-import io.aipim.vcppostgrestoaas.AasPropValue;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public class JsonParser {
 
-	JSONObject schema;
+	Optional<JSONObject> schema = Optional.empty();
+
+	JsonParser(String schema) throws JSONException {
+		if (schema != null) this.schema =
+			Optional.of(new JSONObject(schema));
+	}
 
 	HashMap<String, AasPropValue> parse(String rawJson)
 		throws JSONException {
-		return new JSONObject(rawJson)
-			.keySet()
-			.stream()
-			.collect(
-				Collectors.toMap(
-					k -> k,
-					v -> new AasPropValue(v),
-					(p, n) -> n,
-					HashMap::new
-				)
-			);
+		return rawJson == null
+			? new HashMap<>()
+			: new JSONObject(rawJson)
+				.keySet()
+				.stream()
+				.collect(
+					Collectors.toMap(
+						k -> k,
+						v -> new AasPropValue(v),
+						(p, n) -> n,
+						HashMap::new
+					)
+				);
 	}
 }

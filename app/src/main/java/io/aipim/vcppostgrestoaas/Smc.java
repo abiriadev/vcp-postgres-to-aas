@@ -5,13 +5,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.digitaltwin.aas4j.v3.model.AASSubmodelElements;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementList;
 
+@RequiredArgsConstructor
 public class Smc implements Serializable {
 
+	private final String name;
 	private HashMap<String, Object> props = new HashMap<>();
 	private ArrayList<Smc> children = new ArrayList<>();
 
@@ -25,6 +28,7 @@ public class Smc implements Serializable {
 
 	public SubmodelElement toAas() {
 		return new DefaultSubmodelElementList.Builder()
+			.idShort(name)
 			.orderRelevant(false)
 			.typeValueListElement(
 				AASSubmodelElements.PROPERTY
