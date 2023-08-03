@@ -12,6 +12,22 @@ public class JsonParser {
 
 	Optional<JSONObject> schema = Optional.empty();
 
+	private static HashMap<String, Object> jsonObjectToHashMap(
+		JSONObject jsonObject
+	) {
+		return jsonObject
+			.keySet()
+			.stream()
+			.collect(
+				Collectors.toMap(
+					k -> k,
+					v -> jsonObject.get(v),
+					(p, n) -> n,
+					HashMap::new
+				)
+			);
+	}
+
 	JsonParser(String schema) throws JSONException {
 		if (schema != null) this.schema =
 			Optional.of(new JSONObject(schema));
@@ -21,13 +37,13 @@ public class JsonParser {
 		throws JSONException {
 		return rawJson == null
 			? new HashMap<>()
-			: new JSONObject(rawJson)
-				.keySet()
+			: jsonObjectToHashMap(new JSONObject(rawJson))
+				.entrySet()
 				.stream()
 				.collect(
 					Collectors.toMap(
-						k -> k,
-						v -> new AasPropValue(v),
+						k -> k.getKey(),
+						v -> new AasPropValue(v.getValue()),
 						(p, n) -> n,
 						HashMap::new
 					)

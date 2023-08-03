@@ -7,16 +7,13 @@ public class App {
 	public static void main(String[] args) {
 		try {
 			System.out.println(
-				new JsonSerializer()
-					.write(
-						new Fetcher(
-							"jdbc:postgresql://localhost:5432/mod",
-							"sa",
-							"1"
-						)
-							.fetch()
-					)
-			);
+					new JsonSerializer()
+							.write(
+									new Fetcher(
+											"jdbc:postgresql://localhost:5432/mod",
+											"sa",
+											"1")
+											.fetch()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

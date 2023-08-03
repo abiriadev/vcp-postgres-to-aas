@@ -19,6 +19,8 @@ public class AasPropValue {
 			return DataTypeDefXSD.INTEGER;
 		} else if (value instanceof Boolean) {
 			return DataTypeDefXSD.BOOLEAN;
+		} else if (value.equals(null)) {
+			return null;
 		} else { // probably array or nested object
 			throw new IllegalArgumentException();
 		}
