@@ -1,5 +1,6 @@
 package io.aipim.vcppostgrestoaas;
 
+import com.google.common.collect.Streams;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementList;
 
 public class Smc implements Serializable {
 
-	private HashMap<String, Object> props;
+	private HashMap<String, Object> props = new HashMap<>();
 	private ArrayList<Smc> children = new ArrayList<>();
 
 	public void put(String key, Object value) {
@@ -29,22 +30,25 @@ public class Smc implements Serializable {
 				AASSubmodelElements.PROPERTY
 			)
 			.value(
-				children
-					.stream()
-					.map(c -> c.toAas())
-					.collect(Collectors.toList())
-			)
-			.value(
-				props
-					.entrySet()
-					.stream()
-					.map(ntry ->
-						new DefaultProperty.Builder()
-							.idShort(ntry.getKey())
-							.value(
-								ntry.getValue().toString()
-							)
-							.build()
+				Streams
+					.concat(
+						props
+							.entrySet()
+							.stream()
+							.map(ntry ->
+								new DefaultProperty.Builder()
+									.idShort(ntry.getKey())
+									.value(
+										ntry.getValue() ==
+											null
+											? "null"
+											: ntry.toString()
+									)
+									.build()
+							),
+						children
+							.stream()
+							.map(c -> c.toAas())
 					)
 					.collect(Collectors.toList())
 			)

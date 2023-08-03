@@ -6,10 +6,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 
 @RequiredArgsConstructor
 public class Fetcher {
@@ -24,18 +27,21 @@ public class Fetcher {
 	@NonNull
 	String password;
 
-	private HashMap<String, Smc> pool;
+	private HashMap<String, Smc> pool = new HashMap<>();
 
-	public Env fetch() throws SQLException, IOException {
+	public Environment fetch()
+		throws SQLException, IOException {
 		// Query to be executed
 		var query = new QueryBuilder(
 			new QueryBuilderConfig.QueryBuilderConfigBuilder()
 				.template("fetch.sql")
 				.group_id(3)
-				.limit(Optional.of(5))
+				.limit(Optional.of(30))
 				.build()
 		)
 			.build();
+
+		var lll = new ArrayList<Smc>();
 
 		try (
 			Connection connection = DriverManager.getConnection(
@@ -126,12 +132,32 @@ public class Fetcher {
 
 				var smc = new Smc();
 				smc.put("treeId", treeId);
+				smc.put("treeName", treeName);
+				smc.put("path", path);
+				smc.put("active", active);
+				smc.put("created_by", treeCreatedBy);
+				smc.put("created_at", treeCreatedAt);
+				smc.put("modified_by", treeModifiedBy);
+				smc.put("modified_at", treeModifiedAt);
 
 				pool.put(path, smc);
+
+				System.out.println(path);
+
+				var prt = PathParser.parent(path);
+				if (prt.isPresent()) {
+					pool.get(prt.get()).insert(smc);
+				} else {
+					lll.add(smc);
+				}
 			}
 		}
-		// var env = Env.build(pool.values().toArray()[0]);
 
-		return new Env();
+		return Env.build(
+			lll
+				.stream()
+				.map(l -> l.toAas())
+				.collect(Collectors.toList())
+		);
 	}
 }
