@@ -8,3 +8,8 @@ bin
 node_modules/
 
 ignored/
+
+.settings
+.project
+.factorypath
+.classpath
