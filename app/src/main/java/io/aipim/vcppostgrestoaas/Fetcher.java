@@ -12,9 +12,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 
 @RequiredArgsConstructor
+@Slf4j
 public class Fetcher {
 
 	// JDBC URL, username, and password of PostgreSQL server
@@ -78,7 +80,7 @@ public class Fetcher {
 
 				pool.put(path, smc);
 
-				System.out.println(path);
+				log.info(path);
 
 				var prt = PathParser.parent(path);
 				if (prt.isPresent()) {
