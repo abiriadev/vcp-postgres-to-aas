@@ -10,7 +10,7 @@ public class App {
 				new JsonSerializer()
 					.write(
 						new Fetcher(
-							"jdbc:postgresql://192.168.0.33:5437/mod",
+							"jdbc:postgresql://localhost:5432/mod",
 							"sa",
 							"1"
 						)
