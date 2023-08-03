@@ -9,11 +9,9 @@ import java.sql.Statement;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 
 @RequiredArgsConstructor
-public class Fetcher {
+public class Fetcher<T> {
 
 	// JDBC URL, username, and password of PostgreSQL server
 	@NonNull
@@ -26,10 +24,9 @@ public class Fetcher {
 	String password;
 
 	@NonNull
-	private TreeBuilder treeBuilder;
+	private ResponseParser<T> responseParser;
 
-	public Environment fetch()
-		throws SQLException, IOException {
+	public T fetch() throws SQLException, IOException {
 		// Query to be executed
 		var query = new QueryBuilder(
 			new QueryBuilderConfig.QueryBuilderConfigBuilder()
@@ -49,7 +46,7 @@ public class Fetcher {
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query)
 		) {
-			return treeBuilder.buildTree(rs);
+			return responseParser.parseResponse(rs);
 		}
 	}
 }

@@ -10,12 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 
 @Slf4j
-public class TreeBuilder {
+public class TreeBuilder
+	implements ResponseParser<Environment> {
 
 	private List<Smc> lll = new ArrayList<Smc>();
 	private HashMap<String, Smc> pool = new HashMap<>();
 
-	Environment buildTree(ResultSet rs)
+	@Override
+	public Environment parseResponse(ResultSet rs)
 		throws SQLException {
 		while (rs.next()) {
 			var path = rs.getString("path"); // @varchar(100)

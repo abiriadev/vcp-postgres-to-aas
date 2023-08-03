@@ -9,7 +9,7 @@ public class App {
 			System.out.println(
 				new JsonSerializer()
 					.write(
-						new Fetcher(
+						new Fetcher<>(
 							"jdbc:postgresql://localhost:5432/mod",
 							"sa",
 							"1",
