@@ -1,6 +1,5 @@
 package io.aipim.vcppostgrestoaas;
 
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonSerializer;
 
 public class App {
@@ -13,7 +12,8 @@ public class App {
 						new Fetcher(
 							"jdbc:postgresql://localhost:5432/mod",
 							"sa",
-							"1"
+							"1",
+							new TreeBuilder()
 						)
 							.fetch()
 					)

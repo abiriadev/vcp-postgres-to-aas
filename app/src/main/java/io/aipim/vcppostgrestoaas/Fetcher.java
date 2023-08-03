@@ -6,17 +6,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 
 @RequiredArgsConstructor
-@Slf4j
 public class Fetcher {
 
 	// JDBC URL, username, and password of PostgreSQL server
@@ -29,7 +25,8 @@ public class Fetcher {
 	@NonNull
 	String password;
 
-	private HashMap<String, Smc> pool = new HashMap<>();
+	@NonNull
+	private TreeBuilder treeBuilder;
 
 	public Environment fetch()
 		throws SQLException, IOException {
@@ -43,8 +40,6 @@ public class Fetcher {
 		)
 			.build();
 
-		var lll = new ArrayList<Smc>();
-
 		try (
 			Connection connection = DriverManager.getConnection(
 				url,
@@ -54,48 +49,7 @@ public class Fetcher {
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query)
 		) {
-			while (rs.next()) {
-				var path = rs.getString("path"); // @varchar(100)
-				var name = rs.getString("name"); // @varchar(50)
-				var attribute = rs.getString("attribute"); // @json?
-				var attributeSchema = rs.getString(
-					"attribute_schema"
-				); // @json?
-				var leaf = rs.getBoolean("leaf"); // @boolean
-
-				var smc = new Smc(name);
-
-				new JsonParser(attributeSchema)
-					.parse(attribute)
-					.entrySet()
-					.stream()
-					.forEach(ent ->
-						smc.put(
-							ent.getKey(),
-							ent.getValue()
-						)
-					);
-
-				smc.put("leaf", leaf);
-
-				pool.put(path, smc);
-
-				log.info(path);
-
-				var prt = PathParser.parent(path);
-				if (prt.isPresent()) {
-					pool.get(prt.get()).insert(smc);
-				} else {
-					lll.add(smc);
-				}
-			}
+			return treeBuilder.buildTree(rs);
 		}
-
-		return Env.build(
-			lll
-				.stream()
-				.map(l -> l.toAas())
-				.collect(Collectors.toList())
-		);
 	}
 }
