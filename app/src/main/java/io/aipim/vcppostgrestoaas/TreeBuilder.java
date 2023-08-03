@@ -29,6 +29,7 @@ public class TreeBuilder
 			var leaf = rs.getBoolean("leaf"); // @boolean
 
 			var smc = new Smc(name);
+			pool.put(path, smc);
 
 			new JsonParser(attributeSchema)
 				.parse(attribute)
@@ -37,10 +38,7 @@ public class TreeBuilder
 				.forEach(ent ->
 					smc.put(ent.getKey(), ent.getValue())
 				);
-
 			smc.put("leaf", leaf);
-
-			pool.put(path, smc);
 
 			log.info(path);
 
@@ -48,11 +46,9 @@ public class TreeBuilder
 			if (
 				prt.isPresent() &&
 				PathParser.depth(prt.get()) > 0
-			) {
-				pool.get(prt.get()).insert(smc);
-			} else {
-				lll.add(smc);
-			}
+			) pool.get(prt.get()).insert(smc); else lll.add(
+				smc
+			);
 		}
 
 		return Env.build(
