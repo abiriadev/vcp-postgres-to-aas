@@ -38,7 +38,7 @@ public class TreeBuilder
 				.forEach(ent ->
 					smc.put(ent.getKey(), ent.getValue())
 				);
-			// smc.put("leaf", leaf);
+			smc.put("leaf", new AasPropValue(leaf));
 
 			log.info(path);
 
@@ -49,6 +49,8 @@ public class TreeBuilder
 			) pool.get(prt.get()).insert(smc); else lll.add(
 				smc
 			);
+
+			if (leaf) smc.insert(new Smc("opcua-data"));
 		}
 
 		return Env.build(
