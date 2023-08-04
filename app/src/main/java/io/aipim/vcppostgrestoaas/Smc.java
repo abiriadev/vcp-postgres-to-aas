@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.digitaltwin.aas4j.v3.model.AASSubmodelElements;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultLangStringNameType;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementList;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementCollection;
 
 @RequiredArgsConstructor
 public class Smc implements Serializable {
@@ -28,11 +28,13 @@ public class Smc implements Serializable {
 	}
 
 	public SubmodelElement toAas() {
-		return new DefaultSubmodelElementList.Builder()
+		return new DefaultSubmodelElementCollection.Builder()
 			.idShort(name)
-			.orderRelevant(false)
-			.typeValueListElement(
-				AASSubmodelElements.PROPERTY
+			.displayName(
+				new DefaultLangStringNameType.Builder()
+					.language("ko")
+					.text(name)
+					.build()
 			)
 			.value(
 				Streams
