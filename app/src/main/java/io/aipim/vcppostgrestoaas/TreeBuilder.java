@@ -17,42 +17,43 @@ public class TreeBuilder
 	private HashMap<String, Smc> pool = new HashMap<>();
 
 	@Override
-	public Environment parseResponse(ResultSet rs)
+	public void consumeRecord(ResultSet rs)
 		throws SQLException {
-		while (rs.next()) {
-			var path = rs.getString("path"); // @varchar(100)
-			var name = rs.getString("name"); // @varchar(50)
-			var attribute = rs.getString("attribute"); // @json?
-			var attributeSchema = rs.getString(
-				"attribute_schema"
-			); // @json?
-			var leaf = rs.getBoolean("leaf"); // @boolean
+		var path = rs.getString("path"); // @varchar(100)
+		var name = rs.getString("name"); // @varchar(50)
+		var attribute = rs.getString("attribute"); // @json?
+		var attributeSchema = rs.getString(
+			"attribute_schema"
+		); // @json?
+		var leaf = rs.getBoolean("leaf"); // @boolean
 
-			var smc = new Smc(name);
-			pool.put(path, smc);
+		var smc = new Smc(name);
+		pool.put(path, smc);
 
-			new JsonParser(attributeSchema)
-				.parse(attribute)
-				.entrySet()
-				.stream()
-				.forEach(ent ->
-					smc.put(ent.getKey(), ent.getValue())
-				);
-			smc.put("leaf", new AasPropValue(leaf));
-
-			log.info(path);
-
-			var prt = PathParser.parent(path);
-			if (
-				prt.isPresent() &&
-				PathParser.depth(prt.get()) > 0
-			) pool.get(prt.get()).insert(smc); else lll.add(
-				smc
+		new JsonParser(attributeSchema)
+			.parse(attribute)
+			.entrySet()
+			.stream()
+			.forEach(ent ->
+				smc.put(ent.getKey(), ent.getValue())
 			);
+		smc.put("leaf", new AasPropValue(leaf));
 
-			if (leaf) smc.insert(new Smc("opcua-data"));
-		}
+		log.info(path);
 
+		var prt = PathParser.parent(path);
+		if (
+			prt.isPresent() &&
+			PathParser.depth(prt.get()) > 0
+		) pool.get(prt.get()).insert(smc); else lll.add(
+			smc
+		);
+
+		if (leaf) smc.insert(new Smc("opcua-data"));
+	}
+
+	@Override
+	public Environment digest() {
 		return Env.build(
 			lll
 				.stream()

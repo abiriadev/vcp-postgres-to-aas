@@ -1,6 +1,5 @@
 package io.aipim.vcppostgrestoaas;
 
-import io.aipim.vcppostgrestoaas.Fetcher;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonSerializer;
 
 public class App {

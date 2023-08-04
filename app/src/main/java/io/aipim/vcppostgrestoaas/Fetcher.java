@@ -46,7 +46,10 @@ public class Fetcher<T> {
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query)
 		) {
-			return responseParser.parseResponse(rs);
+			while (rs.next()) responseParser.consumeRecord(
+				rs
+			);
+			return responseParser.digest();
 		}
 	}
 }
