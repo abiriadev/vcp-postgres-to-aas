@@ -1,5 +1,6 @@
 package io.aipim.vcppostgrestoaas;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,12 @@ public class AasPropValue {
 		) return DataTypeDefXSD.STRING; else if (
 			value instanceof Integer
 		) return DataTypeDefXSD.INTEGER; else if (
+			value instanceof Float
+		) return DataTypeDefXSD.FLOAT; else if (
+			value instanceof Double
+		) return DataTypeDefXSD.DOUBLE; else if (
+			value instanceof BigDecimal
+		) return DataTypeDefXSD.DECIMAL; else if (
 			value instanceof Boolean
 		) return DataTypeDefXSD.BOOLEAN; else if (
 			value.equals(null)
