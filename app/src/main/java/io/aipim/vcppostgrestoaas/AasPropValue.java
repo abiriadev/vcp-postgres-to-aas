@@ -27,7 +27,9 @@ public class AasPropValue {
 	AasPropValue(Object value) {
 		this(
 			jsonTypeToXsd(value),
-			Optional.of(value.toString())
+			Optional.ofNullable(
+				value == null ? null : value.toString()
+			)
 		);
 	}
 

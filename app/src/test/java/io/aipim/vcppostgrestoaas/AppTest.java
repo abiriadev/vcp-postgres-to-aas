@@ -6,6 +6,7 @@ package io.aipim.vcppostgrestoaas;
 import static org.junit.Assert.*;
 
 import java.util.Optional;
+import org.json.JSONObject;
 import org.junit.Test;
 
 public class AppTest {

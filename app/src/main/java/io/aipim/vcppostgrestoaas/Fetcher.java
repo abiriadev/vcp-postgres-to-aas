@@ -32,7 +32,7 @@ public class Fetcher<T> {
 			new QueryBuilderConfig.QueryBuilderConfigBuilder()
 				.template("fetch.sql")
 				.group_id(3)
-				.limit(Optional.of(30))
+				.limit(Optional.of(100))
 				.build()
 		)
 			.build();

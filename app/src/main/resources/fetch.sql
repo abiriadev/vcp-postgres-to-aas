@@ -2,6 +2,7 @@ select
 	tree.path,
 	tree.name,
 	tree.attribute,
+	tree.category,
 	category.attribute_schema,
 	category.leaf
 from tree

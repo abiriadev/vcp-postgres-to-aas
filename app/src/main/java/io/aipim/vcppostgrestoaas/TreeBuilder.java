@@ -38,7 +38,7 @@ public class TreeBuilder
 				.forEach(ent ->
 					smc.put(ent.getKey(), ent.getValue())
 				);
-			smc.put("leaf", leaf);
+			// smc.put("leaf", leaf);
 
 			log.info(path);
 

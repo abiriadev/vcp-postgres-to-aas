@@ -15,10 +15,11 @@ import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementList;
 public class Smc implements Serializable {
 
 	private final String name;
-	private HashMap<String, Object> props = new HashMap<>();
+	private HashMap<String, AasPropValue> props =
+		new HashMap<>();
 	private ArrayList<Smc> children = new ArrayList<>();
 
-	public void put(String key, Object value) {
+	public void put(String key, AasPropValue value) {
 		props.put(key, value);
 	}
 
@@ -39,14 +40,19 @@ public class Smc implements Serializable {
 						props
 							.entrySet()
 							.stream()
-							.map(ntry ->
+							.map(ent ->
 								new DefaultProperty.Builder()
-									.idShort(ntry.getKey())
+									.idShort(ent.getKey())
+									.valueType(
+										ent
+											.getValue()
+											.getType()
+									)
 									.value(
-										ntry.getValue() ==
-											null
-											? "null"
-											: ntry.toString()
+										ent
+											.getValue()
+											.getValue()
+											.orElse("null")
 									)
 									.build()
 							),
