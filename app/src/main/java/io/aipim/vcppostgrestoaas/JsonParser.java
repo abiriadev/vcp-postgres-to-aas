@@ -1,16 +1,17 @@
 package io.aipim.vcppostgrestoaas;
 
+import io.aipim.vcppostgrestoaas.utils.ToXsd;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.NoArgsConstructor;
+import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXSD;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@NoArgsConstructor
 public class JsonParser {
 
-	Optional<JSONObject> schema = Optional.empty();
+	Optional<HashMap<String, DataTypeDefXSD>> schema =
+		Optional.empty();
 
 	private static HashMap<String, Object> jsonObjectToHashMap(
 		JSONObject jsonObject
@@ -28,9 +29,34 @@ public class JsonParser {
 			);
 	}
 
+	// NOTE: schema is possibly null
 	JsonParser(String schema) throws JSONException {
-		if (schema != null) this.schema =
-			Optional.of(new JSONObject(schema));
+		this.schema =
+			Optional
+				.ofNullable(schema)
+				.map(s -> new JSONObject(s)) // NOTE: all schema is JSONObject
+				.map(j ->
+					j
+						.keySet()
+						.stream()
+						.collect(
+							Collectors.toMap(
+								k -> k,
+								k ->
+									ToXsd.jsonSchemaToXsd( // NOTE: data_type is guaranteed to be valid JSON schema type
+										j
+											.getJSONObject(
+												k
+											)
+											.getString(
+												"data_type"
+											) // NOTE: these path are guaranteed to be exist
+									),
+								(p, n) -> n,
+								HashMap::new
+							)
+						)
+				);
 	}
 
 	HashMap<String, AasPropValue> parse(String rawJson)
