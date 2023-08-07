@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXSD;
@@ -23,6 +24,9 @@ public class TreeBuilder
 		throws SQLException {
 		var path = rs.getString("path"); // @varchar(100)
 		var name = rs.getString("name"); // @varchar(50)
+		var description = Optional.ofNullable(
+			rs.getString("description")
+		); // @varchar(100)?
 		var attribute = rs.getString("attribute"); // @json?
 		var attributeSchema = rs.getString(
 			"attribute_schema"
@@ -30,7 +34,7 @@ public class TreeBuilder
 		var category = rs.getString("category"); // @verchar(50)
 		var leaf = rs.getBoolean("leaf"); // @boolean
 
-		var smc = new Smc(name, category);
+		var smc = new Smc(name, category, description);
 		pool.put(path, smc);
 
 		new JsonParser(attributeSchema)
@@ -56,7 +60,11 @@ public class TreeBuilder
 		);
 
 		if (leaf) smc.insert(
-			new Smc("opcua-data", "opcua-data")
+			new Smc(
+				"opcua-data",
+				"opcua-data",
+				Optional.of("OPC UA data")
+			)
 		);
 	}
 

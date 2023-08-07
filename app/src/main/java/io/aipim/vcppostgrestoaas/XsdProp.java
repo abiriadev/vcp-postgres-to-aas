@@ -8,12 +8,16 @@ import lombok.Setter;
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXSD;
 import org.eclipse.digitaltwin.aas4j.v3.model.EmbeddedDataSpecification;
 import org.eclipse.digitaltwin.aas4j.v3.model.Extension;
+import org.eclipse.digitaltwin.aas4j.v3.model.KeyTypes;
 import org.eclipse.digitaltwin.aas4j.v3.model.LangStringNameType;
 import org.eclipse.digitaltwin.aas4j.v3.model.LangStringTextType;
 import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.eclipse.digitaltwin.aas4j.v3.model.Qualifier;
 import org.eclipse.digitaltwin.aas4j.v3.model.Reference;
+import org.eclipse.digitaltwin.aas4j.v3.model.ReferenceTypes;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultKey;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultLangStringNameType;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 
 @Getter
 @Setter
@@ -64,5 +68,20 @@ public class XsdProp implements Property {
 			Optional
 				.ofNullable(value)
 				.map(s -> s.toString());
+		semanticID =
+			new DefaultReference.Builder()
+				.type(ReferenceTypes.EXTERNAL_REFERENCE)
+				.keys(
+					new DefaultKey.Builder()
+						.type(KeyTypes.GLOBAL_REFERENCE)
+						.value(
+							String.format(
+								"https://aipim.io/spec/property/%s",
+								name
+							)
+						)
+						.build()
+				)
+				.build();
 	}
 }

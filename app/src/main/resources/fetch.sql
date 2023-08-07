@@ -1,6 +1,7 @@
 select
 	tree.path,
 	tree.name,
+	tree.description,
 	tree.attribute,
 	tree.category,
 	category.attribute_schema,
