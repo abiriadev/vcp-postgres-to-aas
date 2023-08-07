@@ -18,12 +18,6 @@ public class Fetcher<T> {
 	String url;
 
 	@NonNull
-	String user;
-
-	@NonNull
-	String password;
-
-	@NonNull
 	private ResponseParser<T> responseParser;
 
 	public T fetch() throws SQLException, IOException {
@@ -37,11 +31,11 @@ public class Fetcher<T> {
 		)
 			.build();
 
+		System.out.println("dfds: " + url);
+
 		try (
 			Connection connection = DriverManager.getConnection(
-				url,
-				user,
-				password
+				url
 			);
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query)
