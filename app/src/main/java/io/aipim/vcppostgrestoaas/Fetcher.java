@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -20,18 +19,14 @@ public class Fetcher<T> {
 	String url;
 
 	@NonNull
+	QueryBuilderConfig queryBuilderConfig;
+
+	@NonNull
 	private ResponseParser<T> responseParser;
 
 	public T fetch() throws SQLException, IOException {
 		// Query to be executed
-		var query = new QueryBuilder(
-			QueryBuilderConfig
-				.builder()
-				.template("fetch.sql")
-				.group_id(3)
-				.limit(Optional.of(100))
-				.build()
-		)
+		var query = new QueryBuilder(queryBuilderConfig)
 			.build();
 
 		System.out.println("dfds: " + url);

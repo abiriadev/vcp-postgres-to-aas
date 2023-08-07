@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @NoArgsConstructor
-@Slf4j
 public class JsonParser {
 
 	Optional<JSONObject> schema = Optional.empty();

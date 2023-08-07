@@ -4,7 +4,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConnectionUrlBuilder {
 
-	static String build(Dotenv dotenv) throws Exception {
+	public static String build(Dotenv dotenv) throws Exception {
 		var database = dotenv.get("PGDATABASE");
 		if (database == null) throw new Exception(
 			"PGDATABASE environment variable not set"
