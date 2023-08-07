@@ -1,5 +1,6 @@
 package io.aipim.vcppostgrestoaas;
 
+import io.aipim.vcppostgrestoaas.utils.PathParser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

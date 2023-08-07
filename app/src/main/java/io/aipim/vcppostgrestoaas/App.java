@@ -1,5 +1,6 @@
 package io.aipim.vcppostgrestoaas;
 
+import io.aipim.vcppostgrestoaas.utils.ConnectionUrlBuilder;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonSerializer;
 

@@ -1,5 +1,7 @@
 package io.aipim.vcppostgrestoaas;
 
+import io.aipim.vcppostgrestoaas.utils.QueryBuilder;
+import io.aipim.vcppostgrestoaas.utils.QueryBuilderConfig;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,7 +25,8 @@ public class Fetcher<T> {
 	public T fetch() throws SQLException, IOException {
 		// Query to be executed
 		var query = new QueryBuilder(
-			new QueryBuilderConfig.QueryBuilderConfigBuilder()
+			QueryBuilderConfig
+				.builder()
 				.template("fetch.sql")
 				.group_id(3)
 				.limit(Optional.of(100))

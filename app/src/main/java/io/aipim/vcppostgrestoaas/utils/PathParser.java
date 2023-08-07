@@ -1,4 +1,4 @@
-package io.aipim.vcppostgrestoaas;
+package io.aipim.vcppostgrestoaas.utils;
 
 import java.util.Optional;
 

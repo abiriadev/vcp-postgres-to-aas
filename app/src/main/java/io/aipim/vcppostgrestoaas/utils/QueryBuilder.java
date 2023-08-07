@@ -1,5 +1,6 @@
-package io.aipim.vcppostgrestoaas;
+package io.aipim.vcppostgrestoaas.utils;
 
+import io.aipim.vcppostgrestoaas.App;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
@@ -20,7 +21,7 @@ public class QueryBuilder {
 			);
 	}
 
-	String build() {
+	public String build() {
 		if (qbc.limit == null) System.out.println("nul");
 
 		return String.format(
