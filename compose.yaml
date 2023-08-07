@@ -1,0 +1,15 @@
+services:
+  app:
+    build:
+      context: .
+      target: runner
+    restart: 'no'
+    image: vcp-postgres-to-aas:v0.1.0
+    environment:
+      - PGDATABASE=${PGDATABASE:-mod}
+      - PGHOST=database
+      - PGPORT=${PGPORT:-5432}
+      - PGUSER=${PGUSER:-sa}
+      - PGPASSWORD=${PGPASSWORD}
+    extra_hosts:
+      - database:${PGHOST:-192.168.0.33}
