@@ -29,8 +29,6 @@ public class Fetcher<T> {
 		var query = new QueryBuilder(queryBuilderConfig)
 			.build();
 
-		System.out.println("dfds: " + url);
-
 		try (
 			Connection connection = DriverManager.getConnection(
 				url
