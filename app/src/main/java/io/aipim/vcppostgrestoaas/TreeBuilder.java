@@ -25,9 +25,10 @@ public class TreeBuilder
 		var attributeSchema = rs.getString(
 			"attribute_schema"
 		); // @json?
+		var category = rs.getString("category"); // @verchar(50)
 		var leaf = rs.getBoolean("leaf"); // @boolean
 
-		var smc = new Smc(name);
+		var smc = new Smc(name, category);
 		pool.put(path, smc);
 
 		new JsonParser(attributeSchema)
@@ -49,7 +50,9 @@ public class TreeBuilder
 			smc
 		);
 
-		if (leaf) smc.insert(new Smc("opcua-data"));
+		if (leaf) smc.insert(
+			new Smc("opcua-data", "opcua-data")
+		);
 	}
 
 	@Override

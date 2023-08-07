@@ -48,16 +48,12 @@ public class Env {
 								ReferenceTypes.MODEL_REFERENCE
 							)
 							.keys(
-								List.of(
-									new DefaultKey.Builder()
-										.type(
-											KeyTypes.SUBMODEL
-										)
-										.value(
-											"https://aipim.io/DataCatalog/1/ModelEntry"
-										)
-										.build()
-								)
+								new DefaultKey.Builder()
+									.type(KeyTypes.SUBMODEL)
+									.value(
+										"https://aipim.io/DataCatalog/1/ModelEntry"
+									)
+									.build()
 							)
 							.build()
 					)
@@ -69,6 +65,23 @@ public class Env {
 						"https://aipim.io/DataCatalog/1/ModelEntry"
 					)
 					.idShort("ModelEntry")
+					.semanticID(
+						new DefaultReference.Builder()
+							.type(
+								ReferenceTypes.EXTERNAL_REFERENCE
+							)
+							.keys(
+								new DefaultKey.Builder()
+									.type(
+										KeyTypes.GLOBAL_REFERENCE
+									)
+									.value(
+										"https://aipim.io/spec/ModelEntry"
+									)
+									.build()
+							)
+							.build()
+					)
 					.submodelElements(subel)
 					.build()
 			)
