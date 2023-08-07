@@ -13,3 +13,5 @@ ignored/
 .project
 .factorypath
 .classpath
+
+.env
