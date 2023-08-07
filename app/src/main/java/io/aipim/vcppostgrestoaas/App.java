@@ -9,7 +9,10 @@ import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonSerializer;
 public class App {
 
 	public static void main(String[] args) {
-		var dotenv = Dotenv.load();
+		var dotenv = Dotenv
+			.configure()
+			.ignoreIfMissing()
+			.load();
 
 		try {
 			System.out.println(
