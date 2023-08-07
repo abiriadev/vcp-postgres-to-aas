@@ -5,6 +5,7 @@ package io.aipim.vcppostgrestoaas;
 
 import static org.junit.Assert.*;
 
+import io.aipim.vcppostgrestoaas.utils.PathParser;
 import java.util.Optional;
 import org.json.JSONObject;
 import org.junit.Test;
