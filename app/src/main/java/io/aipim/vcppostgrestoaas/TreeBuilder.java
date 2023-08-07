@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXSD;
 import org.eclipse.digitaltwin.aas4j.v3.model.Environment;
 
 @Slf4j
@@ -34,12 +35,15 @@ public class TreeBuilder
 
 		new JsonParser(attributeSchema)
 			.parse(attribute)
-			.entrySet()
 			.stream()
-			.forEach(ent ->
-				smc.put(ent.getKey(), ent.getValue())
-			);
-		smc.put("leaf", new AasPropValue(leaf));
+			.forEach(prop -> smc.put(prop));
+		smc.put(
+			new XsdProp(
+				"leaf",
+				DataTypeDefXSD.BOOLEAN,
+				leaf
+			)
+		);
 
 		log.info(path);
 

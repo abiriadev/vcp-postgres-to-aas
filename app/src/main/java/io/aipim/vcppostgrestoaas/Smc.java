@@ -1,17 +1,16 @@
 package io.aipim.vcppostgrestoaas;
 
-import com.google.common.collect.Streams;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.digitaltwin.aas4j.v3.model.KeyTypes;
+import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.eclipse.digitaltwin.aas4j.v3.model.ReferenceTypes;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultKey;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultLangStringNameType;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementCollection;
 
@@ -20,12 +19,12 @@ public class Smc implements Serializable {
 
 	private final String name;
 	private final String category;
-	private HashMap<String, AasPropValue> props =
-		new HashMap<>();
+	private List<Property> props = new ArrayList<>();
+
 	private ArrayList<Smc> children = new ArrayList<>();
 
-	public void put(String key, AasPropValue value) {
-		props.put(key, value);
+	public void put(Property prop) {
+		props.add(prop);
 	}
 
 	public void insert(Smc smc) {
@@ -58,32 +57,14 @@ public class Smc implements Serializable {
 					.build()
 			)
 			.value(
-				Streams
+				Stream
 					.concat(
-						props
-							.entrySet()
-							.stream()
-							.map(ent ->
-								new DefaultProperty.Builder()
-									.idShort(ent.getKey())
-									.valueType(
-										ent
-											.getValue()
-											.getType()
-									)
-									.value(
-										ent
-											.getValue()
-											.getValue()
-											.orElse("null")
-									)
-									.build()
-							),
+						props.stream(),
 						children
 							.stream()
 							.map(c -> c.toAas())
 					)
-					.collect(Collectors.toList())
+					.toList()
 			)
 			.build();
 	}

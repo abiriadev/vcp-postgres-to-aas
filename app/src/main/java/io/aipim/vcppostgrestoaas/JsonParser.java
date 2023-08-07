@@ -2,6 +2,7 @@ package io.aipim.vcppostgrestoaas;
 
 import io.aipim.vcppostgrestoaas.utils.ToXsd;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXSD;
@@ -12,22 +13,6 @@ public class JsonParser {
 
 	Optional<HashMap<String, DataTypeDefXSD>> schema =
 		Optional.empty();
-
-	private static HashMap<String, Object> jsonObjectToHashMap(
-		JSONObject jsonObject
-	) {
-		return jsonObject
-			.keySet()
-			.stream()
-			.collect(
-				Collectors.toMap(
-					k -> k,
-					v -> jsonObject.get(v),
-					(p, n) -> n,
-					HashMap::new
-				)
-			);
-	}
 
 	// NOTE: schema is possibly null
 	JsonParser(String schema) throws JSONException {
@@ -59,20 +44,29 @@ public class JsonParser {
 				);
 	}
 
-	HashMap<String, AasPropValue> parse(String rawJson)
+	List<XsdProp> parse(String rawJson)
 		throws JSONException {
-		return rawJson == null || rawJson.equals("null")
-			? new HashMap<>()
-			: jsonObjectToHashMap(new JSONObject(rawJson))
-				.entrySet()
-				.stream()
-				.collect(
-					Collectors.toMap(
-						k -> k.getKey(),
-						v -> new AasPropValue(v.getValue()),
-						(p, n) -> n,
-						HashMap::new
-					)
-				);
+		if (
+			rawJson == null ||
+			rawJson.equals("null") ||
+			schema.isEmpty() // NOTE: it is guaranteed for attributes to be null when their schema is null
+		) return List.of();
+
+		// NOTE: rawJson is now guaranteed not to be null
+		var rawAttr = new JSONObject(rawJson);
+
+		// NOTE: schema is now guaranteed not to be null
+		return schema
+			.get()
+			.entrySet()
+			.stream()
+			.map(ent ->
+				new XsdProp(
+					ent.getKey(),
+					ent.getValue(),
+					rawAttr.get(ent.getKey())
+				)
+			)
+			.collect(Collectors.toList());
 	}
 }
